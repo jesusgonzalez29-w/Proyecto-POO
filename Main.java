@@ -27,6 +27,15 @@ public class Main {
     }
 
 
+    public Main(){
+
+        banco = new Banco();
+        banco.datosPrueba();
+        implementacionLogin();
+
+    }
+
+
 
 
 
