@@ -1,14 +1,15 @@
 public class Cliente extends Usuario {
     private String rfc;
     private int telefono;
-    private String listaCuenta;
+    private CuentaBancaria[] cuentas;
+    private int indiceCuentas; 
 
     // Constructor de la subclase
-    public Cliente(int idUsuario, String nombre, String correo, String contrasena, String rfc, int telefono, String listaCuenta) {
+    public Cliente(int idUsuario, String nombre, String correo, String contrasena, String rfc, int telefono) {
         super(idUsuario, nombre, correo, contrasena); // Obligatorio: invoca al constructor del padre
         this.rfc = rfc;
         this.telefono = telefono;
-        this.listaCuenta = listaCuenta;
+        
     }
 
     public void solicitarCredito() {
@@ -36,11 +37,4 @@ public class Cliente extends Usuario {
         this.telefono = telefono;
     }
 
-    public String getListaCuenta() {
-        return listaCuenta;
-    }
-
-    public void setListaCuenta(String listaCuenta) {
-        this.listaCuenta = listaCuenta;
-    }
 }
