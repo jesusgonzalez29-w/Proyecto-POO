@@ -4,7 +4,7 @@ public class Cliente extends Usuario {
     private CuentaBancaria[] cuentas;
     private int indiceCuentas; 
 
-    // Constructor de la subclase
+    // Constructor de clase hija, llamando primero a clase padre
     public Cliente(int idUsuario, String nombre, String correo, String contrasena, String rfc, int telefono) {
         super(idUsuario, nombre, correo, contrasena); // Obligatorio: invoca al constructor del padre
         this.rfc = rfc;
@@ -14,11 +14,11 @@ public class Cliente extends Usuario {
 
     public void solicitarCredito() {
         // Al heredar, puede usar los métodos públicos del padre como getNombre()
-        System.out.println("El cliente " + getNombre() + " está solicitando un crédito.");
+        System.out.println("Solicitando credito a nombre de " + getNombre());
     }
 
     public void consultarHistorial() {
-        System.out.println("Consultando historial de transacciones...");
+        System.out.println("Consultando historial de transacciones");
     }
 
     public String getRfc() {

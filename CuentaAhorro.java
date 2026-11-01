@@ -9,6 +9,6 @@ public class CuentaAhorro extends CuentaBancaria {
     }
 
     public void aplicarInteres() {
-        System.out.println("Aplicando interés mensual del " + tasaInteresMensual);
+        
     }
 }

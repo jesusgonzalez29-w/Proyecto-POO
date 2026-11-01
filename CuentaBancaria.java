@@ -11,6 +11,7 @@ public class CuentaBancaria {
         this.fechaApertura = fechaApertura;
     }
 
+    
     public void depositar(float cantidad) {
         this.saldo += cantidad;
         System.out.println("Depósito exitoso. Nuevo saldo: " + this.saldo);

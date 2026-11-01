@@ -10,15 +10,14 @@ public class CuentaCorriente extends CuentaBancaria {
         this.limiteSobregiro = limiteSobregiro;
     }
 
-    public void aplicarInteres() {
-        System.out.println("Aplicando intereses sobre el sobregiro...");
+    public void setLimiteSobregiro(float limiteSobregiro){
+        this.limiteSobregiro = limiteSobregiro;
     }
 
-    @Override
-    public void retirar(float cantidad) {
-        // La etiqueta @Override indica que reescribimos el método del padre
-        System.out.println("Evaluando límite de sobregiro de " + limiteSobregiro + " antes del retiro...");
+    public float getLimiteSobregiro(){
+        return limiteSobregiro;
     }
+
 
     public float getComisionPorManejo() {
         return comisionPorManejo;

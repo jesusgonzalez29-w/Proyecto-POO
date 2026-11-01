@@ -7,11 +7,11 @@ public class Administrador extends Usuario {
     }
 
     public void aprobarCreditos() {
-        System.out.println("Aprobando crédito de cliente...");
+       
     }
 
     public void consultarHistorialCliente() {
-        System.out.println("Auditando historial del cliente...");
+        
     }
 
     public int getIdEmpleado() {
