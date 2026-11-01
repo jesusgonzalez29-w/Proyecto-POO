@@ -1,9 +1,10 @@
 import java.util.Date;
 
-public class CuentaBancaria {
-    private int numeroCuenta;
-    private float saldo;
-    private Date fechaApertura;
+public class CuentaBancaria implements Transacciones {
+    protected int numeroCuenta;
+    protected float saldo;
+    protected Date fechaApertura;
+    protected Cliente cliente;
 
     public CuentaBancaria(int numeroCuenta, float saldo, Date fechaApertura) {
         this.numeroCuenta = numeroCuenta;
@@ -11,16 +12,6 @@ public class CuentaBancaria {
         this.fechaApertura = fechaApertura;
     }
 
-    
-    public void depositar(float cantidad) {
-        this.saldo += cantidad;
-        System.out.println("Depósito exitoso. Nuevo saldo: " + this.saldo);
-    }
-
-    public void retirar(float cantidad) {
-        this.saldo -= cantidad;
-        System.out.println("Retiro procesado. Saldo restante: " + this.saldo);
-    }
 
     public float consultarSaldo() {
         return this.saldo;
@@ -40,5 +31,27 @@ public class CuentaBancaria {
 
     public void setFechaApertura(Date fechaApertura) {
         this.fechaApertura = fechaApertura;
+    }
+
+    public void setCliente(Cliente cliente){
+        this.cliente = cliente; 
+    }
+
+    public void getCliente(){
+        return cliente;
+    }
+
+
+    
+    @Override
+    public void depositar(float cantidad) {
+        this.saldo += cantidad;
+        System.out.println("Depósito exitoso. Nuevo saldo: " + saldo);
+    }
+
+    @Override
+    public void retirar(float cantidad) {
+        this.saldo -= cantidad;
+        System.out.println("Retiro procesado. Saldo restante: " +saldo);
     }
 }

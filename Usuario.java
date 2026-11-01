@@ -1,11 +1,11 @@
 public class Usuario {
     // Atributos privados para aplicar encapsulamiento
-    private int idUsuario;
-    private String nombre;
-    private String correo;
-    private String contrasena;
+    protected int idUsuario;
+    protected String nombre;
+    protected String correo;
+    protected String contrasena;
 
-    /
+    
     public Usuario(int idUsuario, String nombre, String correo, String contrasena) {
         this.idUsuario = idUsuario;
         this.nombre = nombre;
