@@ -28,12 +28,14 @@ public class Main {
 
         String correo = JOptionPane.showInputDialog("Ingresa correo: ");
         String contrasena = JOptionPane.showInputDialog("Ingresa contrasena: ");
-        
-        int bandera = banco.validarLogin(); 
 
+        int bandera = Validacion.validaUsuario(banco, correo, contrasena);
         if(bandera != -1)
+        {
             JOptionPane.showMessageDialog(null, "Bienvenido "+banco.getUsuarioActual().getNombre());
-
+            return bandera;
+        }
+            
         return -1; 
 
 
@@ -43,14 +45,17 @@ public class Main {
 
 
 
-    public int implementacionLogin(){
+    public void implementacionLogin(){
 
         int bandera = login();
         //METODOS MENUS CAMBIAN LA BANDERA A 1, CUANDO LA BANDERA CAMBIA A 1, FIN DEL PROGRAMA 
         int banderaMenu = 0; 
 
-        if(bandera == -1)
-            JOptionPane.showMessageDialog(null, "Inicio de sesion denegado"); 
+        if(bandera == -1){
+            JOptionPane.showMessageDialog(null, "El correo o la contrasena no coinciden");
+            return;
+        }
+             
        
         while(banderaMenu == 0){
 
@@ -65,8 +70,15 @@ public class Main {
 
         }
 
+    }
+
+    public int menuClientes(){
+        return 1;
+    }
 
 
 
+    public int menuAdmin(){
+        return 1;
     }
 }

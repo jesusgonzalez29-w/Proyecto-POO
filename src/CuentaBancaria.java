@@ -37,7 +37,7 @@ public class CuentaBancaria implements Transacciones {
         this.cliente = cliente; 
     }
 
-    public void getCliente(){
+    public Cliente getCliente(){
         return cliente;
     }
 

@@ -58,8 +58,8 @@ public class Credito {
         private Date fechaCorte;
 
 
-         public TarjetaCredito(int numeroCuenta, float saldo, Date fechaApertura, int numeroTarjeta, int limiteCredito, float saldoDeudor, Date fechaCorte) {
-            super(numeroCuenta, saldo, fechaApertura);
+         public TarjetaCredito(int numeroTarjeta, int limiteCredito, float saldoDeudor, Date fechaCorte) {
+           
             this.numeroTarjeta = numeroTarjeta;
             this.limiteCredito = limiteCredito;
             this.saldoDeudor = saldoDeudor;

@@ -1,11 +1,12 @@
 public class Cliente extends Usuario {
     private String rfc;
-    private int telefono;
+    //long, ya que int no permite todo el rango de numeros telefonicos de 10 digitos
+    private long telefono;
     private CuentaBancaria[] cuentas;
     private int indiceCuentas; 
 
     // Constructor de clase hija, llamando primero a clase padre
-    public Cliente(int idUsuario, String nombre, String correo, String contrasena, String rfc, int telefono) {
+    public Cliente(int idUsuario, String nombre, String correo, String contrasena, String rfc, long telefono) {
         super(idUsuario, nombre, correo, contrasena); // Obligatorio: invoca al constructor del padre
         this.rfc = rfc;
         this.telefono = telefono;
@@ -29,11 +30,11 @@ public class Cliente extends Usuario {
         this.rfc = rfc;
     }
 
-    public int getTelefono() {
+    public long getTelefono() {
         return telefono;
     }
 
-    public void setTelefono(int telefono) {
+    public void setTelefono(long telefono) {
         this.telefono = telefono;
     }
 
