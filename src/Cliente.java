@@ -6,6 +6,7 @@ public class Cliente extends Usuario {
     private CuentaBancaria[] cuentas;
     private int indiceCuentas; 
     private Credito [] creditos; 
+    private int indiceCreditos;
     private int puntaje; 
 
     // Constructor de clase hija, llamando primero a clase padre
@@ -13,6 +14,8 @@ public class Cliente extends Usuario {
         super(idUsuario, nombre, correo, contrasena); // Obligatorio: invoca al constructor del padre
         this.rfc = rfc;
         cuentas = new CuentaBancaria[5];
+        creditos = new Credito[5];
+        indiceCreditos = 0;
         indiceCuentas = 0;
         this.telefono = telefono;
         puntaje = 0;
@@ -44,6 +47,10 @@ public class Cliente extends Usuario {
 
     public int getPuntaje(){
         return puntaje;
+    }
+
+    public int getIndiceCreditos(){
+        return indiceCreditos;
     }
 
     public void setTelefono(long telefono) {
@@ -95,6 +102,10 @@ public class Cliente extends Usuario {
         return estado; 
     }
 
+    public void aumentarPuntaje(int cantidad){
+        puntaje += cantidad;
+    }
+
     public void depositar(float cantidad, int indice){
         cuentas[indice].depositar(cantidad);
     }
@@ -120,6 +131,44 @@ public class Cliente extends Usuario {
         Thread hilo = new Thread(reporte);
         hilo.start();
     }
+
+    public Credito solicitarCredito(int idSolicitud, float monto, int plazo){
+        Credito credito = new Credito(idSolicitud, monto, plazo);
+        creditos[indiceCreditos++] = credito;
+        return credito;
+    }
+
+    public String getCreditosC(){
+        String texto = "";
+        for(int i = 0; i<indiceCreditos; i++){
+            texto+= "\nCredito ["+(i+1)+"] \n" + creditos[i].toString();
+        }
+
+        return texto;
+    }
+
+
+    public CuentaBancaria cancelarCuenta(int indice){
+        if(cuentas[indice].getSaldo() > 0)
+            return null;
+
+        CuentaBancaria eliminado = cuentas[indice];
+        cuentas[indice] = null; 
+        CuentaBancaria []arregloNuevo = new CuentaBancaria[5];
+        int j = 0;
+
+        for(int i = 0; i<indiceCuentas; i++){
+            if(cuentas[i] != null){
+                arregloNuevo[j] = cuentas[i];
+                j++;
+            }
+        }
+        cuentas = arregloNuevo; 
+        indiceCuentas--; 
+        return eliminado;
+    }
+
+
 
 
 }

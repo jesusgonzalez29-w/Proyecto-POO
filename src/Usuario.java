@@ -1,4 +1,6 @@
-public class Usuario {
+import java.io.Serializable;
+
+public class Usuario implements Serializable{
     // Atributos privados para aplicar encapsulamiento
     protected int idUsuario;
     protected String nombre;

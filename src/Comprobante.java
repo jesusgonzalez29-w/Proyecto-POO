@@ -1,5 +1,6 @@
 import java.time.LocalDate;
-public class Comprobante {
+import java.io.Serializable;
+public class Comprobante implements Serializable{
     private int idTransaccion;
     private String tipoTransaccion;
     private float montoTransaccion;

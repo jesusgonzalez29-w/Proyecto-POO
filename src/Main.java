@@ -15,8 +15,11 @@ public class Main {
     public Main(){
 
         banco = new Banco();
-        banco.datosPrueba();
+        banco.cargarDatos();
+        //banco.datosPrueba();
+        banco.autoSave();
         implementacionLogin();
+        banco.parar();
 
     }
 
@@ -72,14 +75,16 @@ public class Main {
 
         int bandera = 0;
         int opc = 0; 
-        String opciones = "\n[1] Solicitar apertura de cuenta \n[2]Consultar saldo cuenta \n[3] Realizar transaccion \n [4] Historial de transacciones\n[5] Solicitar credito \n[6] Abonar tarjeta de credito \n[7] Cancelar cuenta \n[8] Salir";
+        String opciones = "\n[1] Solicitar apertura de cuenta \n[2]Consultar saldo cuenta \n" +
+        "[3] Realizar transaccion \n[4] Historial de transacciones\n[5] Solicitar credito "+
+        "\n[6] Consultar solicitudes de credito\n[7] Abonar tarjeta de credito \n[8] Cancelar cuenta \n[9] Salir";
         String texto = "Menu clientes \n" +opciones;
 
         do{
              opc = Validacion.validaInt(texto);
-            if(opc < 1 || opc > 8)
+            if(opc < 1 || opc > 9)
                 JOptionPane.showMessageDialog(null, "Valor no valido, intente de nuevo");
-        }while(opc < 1 || opc > 8);
+        }while(opc < 1 || opc > 9);
 
         switch(opc){
 
@@ -91,33 +96,47 @@ public class Main {
                 if(!Validacion.nuevoCliente(banco))
                     consultarCuenta(banco);
                 else
-                    JOptionPane.showMessageDialog(null, "No tienes cuentas abiertas");
+                    JOptionPane.showMessageDialog(null, "No tienes cuentas bancarias activas");
                 break;
 
             case 3:
                 if(!Validacion.nuevoCliente(banco))
                     realizarTransaccion(banco);
                   else
-                    JOptionPane.showMessageDialog(null, "No tienes cuentas abiertas");
+                    JOptionPane.showMessageDialog(null, "No tienes cuentas bancarias activas");
                 break;
 
             case 4:
                 if(!Validacion.nuevoCliente(banco))
                     consultarTransacciones(banco);
                 else
-                    JOptionPane.showMessageDialog(null, "No tienes cuentas abiertas");
+                    JOptionPane.showMessageDialog(null, "No tienes cuentas bancarias activas");
                 break;
 
             case 5:
+                if(!Validacion.nuevoCliente(banco))
+                    solicitarCredito(banco);
+                else
+                     JOptionPane.showMessageDialog(null, "No tienes cuentas bancarias activas");
                 break;
 
             case 6:
-                
-                break;
-            case 7:
+                if(!Validacion.nuevoCliente(banco))
+                    consultarEstadosCredito(banco);
+                else
+                    JOptionPane.showMessageDialog(null, "No tienes cuentas bancarias activas");
                 break;
 
+            case 7: 
+                break;
             case 8:
+                if(!Validacion.nuevoCliente(banco))
+                    cancelarCuenta(banco);
+                else
+                    JOptionPane.showMessageDialog(null, "No tienes cuentas bancarias activas");
+                break;
+
+            case 9:
                 bandera = 1;
                 JOptionPane.showMessageDialog(null, "Saliendo...");
                 break;
@@ -303,6 +322,59 @@ public class Main {
     public void consultarTransacciones(Banco banco){
         Usuario usuario = banco.getUsuarioActual();
         ((Cliente)usuario).reporteTransacciones();
+    }
+
+    public void solicitarCredito(Banco banco){
+        Usuario usuario = banco.getUsuarioActual();
+        if(!Validacion.validarPuntaje(banco)){
+            JOptionPane.showMessageDialog(null, "Tu puntaje crediticio de "+ ((Cliente)usuario).getPuntaje()
+                                                 + " es insuficiente para solicitar un credito \nPuntaje minimo: 650");
+            return;
+        }
+
+        int min = 1000;
+        int max = 5000;
+        int idSolicitud = (int)(Math.random() * (max - min + 1)) + min;
+        float monto = Validacion.validaFloat("Ingresar el monto solicitado");
+        int meses = Validacion.validaInt("Ingresar el plazo a meses a pagar"); 
+        Credito credito = ((Cliente)usuario).solicitarCredito(idSolicitud, monto, meses);
+        banco.agregarCredito(credito);
+        JOptionPane.showMessageDialog(null, "Solicitud creada\n"+credito);
+
+            
+        
+    }
+
+    public void consultarEstadosCredito(Banco banco){
+        Usuario usuario = banco.getUsuarioActual();
+        if(((Cliente)usuario).getIndiceCreditos() == 0){
+            JOptionPane.showMessageDialog(null, "No ha solicitado creditos");
+            return;
+        }
+
+       JOptionPane.showMessageDialog(null, "Creditos solicitados \n"+ ((Cliente)usuario).getCreditosC());
+
+    }
+
+    public void cancelarCuenta(Banco banco){
+        Usuario usuario = banco.getUsuarioActual();
+        int indice = 0; 
+        do{
+            String cuentas = "Cuentas a cancelar\n"+ ((Cliente)usuario).getCuentasC();
+            indice = Validacion.validaInt(cuentas);
+        }while(indice < 1 || indice> ((Cliente)usuario).getIndiceCuentas());
+
+        if(((Cliente)usuario).coincideNIP(Validacion.validaInt("Ingresar NIP"),indice-1)){
+            CuentaBancaria cuenta = ((Cliente)usuario).cancelarCuenta(indice-1);
+            if(cuenta != null){
+                banco.eliminarCuenta(cuenta);
+                JOptionPane.showMessageDialog(null, "La cuenta "+cuenta.getNumeroCuenta() +" ha sido cancelada");
+            }else
+                JOptionPane.showMessageDialog(null, "La cuenta aun tiene saldo. Asegurate de retirar todo el efectivo antes de cancelar tu cuenta");
+           
+        }
+            
+
     }
 
    
