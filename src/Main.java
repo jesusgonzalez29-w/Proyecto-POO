@@ -1,4 +1,4 @@
-import java.util.Date;
+import java.time.LocalDate;
 import javax.swing.JOptionPane;
 
 public class Main {
@@ -85,6 +85,7 @@ public class Main {
 
 
             case 1:
+                aperturaCuenta(banco);
                 break;
             case 2:
                 break;
@@ -152,18 +153,46 @@ public class Main {
 
         int maxOpc = 1;
         int opc = 0;
-        String opciones = "[1] Crear cuenta de ahorro";
-        if(Validacion.nuevoCliente() || Validacion.validarPuntaje() >= 650){
-            opciones+="\n[2] Crear cuenta corriente";
+        int min = 100000;
+        int max = 500000;
+        int numeroCuenta;
+        String opciones = "[1] Crear cuenta corriente";
+     
+        if(!Validacion.nuevoCliente(banco) && Validacion.validarPuntaje(banco)){
+            opciones+="\n[2] Crear cuenta de ahorro";
             maxOpc = 2;
         }
             
-        texto = "Apertura de cuentas\n" + opciones;
+        String texto = "Apertura de cuentas\n" + opciones;
         do{
-            int opc = Validacion.validaInt(texto);
+            opc = Validacion.validaInt(texto);
             if(opc < 1 || opc > maxOpc)
-                JOptionPane.showInputDialog(null, "Opcion no valida ");
+                JOptionPane.showMessageDialog(null, "Opcion no valida ");
         }while(opc<1 || opc>maxOpc); 
+
+        Usuario usuario = banco.getUsuarioActual();
+        switch(opc){
+
+            case 1:
+                CuentaCorriente cuenta = null;
+                numeroCuenta = (int) (Math.random() * (max - min + 1)) + min;
+                int nip = Validacion.validaLongitudNIP(Validacion.validaInt("Ingresar nip de 4 digitos"));
+                LocalDate fecha = LocalDate.now();
+                if(!Validacion.validarPuntaje(banco))
+                    //clientes que no cumplan con el minimo de 650 de puntaje crediticio, sin limite de sobregiro y con comision por manejo de $1000 anuales
+                    cuenta = ((Cliente)usuario).crearCuentaCorriente(numeroCuenta,0,fecha,((Cliente)usuario),nip,1000,0);
+                else
+                    cuenta =((Cliente)usuario).crearCuentaCorriente(numeroCuenta,0,fecha,((Cliente)usuario),nip,0,1000); 
+                JOptionPane.showMessageDialog(null, "Cuenta corriente creada\n"+cuenta);
+                break; 
+
+            case 2:
+                ((Cliente)usuario).crearCuentaAhorro();
+                
+            
+
+
+        }
        
     }
 

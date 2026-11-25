@@ -1,15 +1,18 @@
-import java.util.Date;
+import java.time.LocalDate;
 
 public class CuentaBancaria implements Transacciones {
     protected int numeroCuenta;
     protected float saldo;
-    protected Date fechaApertura;
+    protected LocalDate fechaApertura;
     protected Cliente cliente;
+    protected int nip; 
 
-    public CuentaBancaria(int numeroCuenta, float saldo, Date fechaApertura) {
+    public CuentaBancaria(int numeroCuenta, float saldo, LocalDate fechaApertura, Cliente cliente, int nip) {
         this.numeroCuenta = numeroCuenta;
         this.saldo = saldo;
         this.fechaApertura = fechaApertura;
+        this.cliente = cliente;
+        this.nip = nip;
     }
 
 
@@ -25,11 +28,11 @@ public class CuentaBancaria implements Transacciones {
         this.numeroCuenta = numeroCuenta;
     }
 
-    public Date getFechaApertura() {
+    public LocalDate getFechaApertura() {
         return fechaApertura;
     }
 
-    public void setFechaApertura(Date fechaApertura) {
+    public void setFechaApertura(LocalDate fechaApertura) {
         this.fechaApertura = fechaApertura;
     }
 
@@ -53,5 +56,12 @@ public class CuentaBancaria implements Transacciones {
     public void retirar(float cantidad) {
         this.saldo -= cantidad;
         System.out.println("Retiro procesado. Saldo restante: " +saldo);
+    }
+
+    @Override
+    public String toString(){
+        return "# de cuenta: "+numeroCuenta + "\nSaldo: "+saldo
+                +"\nFecha de apertura: "+fechaApertura + "\nCliente: "+cliente.getNombre()
+                +"\nNIP: "+ nip;
     }
 }
