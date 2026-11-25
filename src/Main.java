@@ -92,10 +92,11 @@ public class Main {
                 break;
 
             case 3:
-                depositar(banco);
+                realizarTransaccion(banco);
                 break;
 
             case 4:
+                
                 break;
 
             case 5:
@@ -178,13 +179,13 @@ public class Main {
             case 1:
                 CuentaCorriente cuenta = null;
                 numeroCuenta = (int) (Math.random() * (max - min + 1)) + min;
-                int nip = Validacion.validaLongitudNIP(Validacion.validaInt("Ingresar nip de 4 digitos"));
+                int nip = Validacion.validaLongitudNIP(Validacion.validaInt("Ingresar NIP de 4 digitos \nEste NIP sera utilizado para gestionar los movimientos de la cuenta"));
                 LocalDate fecha = LocalDate.now();
                 if(!Validacion.validarPuntaje(banco))
                     //clientes que no cumplan con el minimo de 650 de puntaje crediticio, sin limite de sobregiro y con comision por manejo de $1000 anuales
-                    cuenta = ((Cliente)usuario).crearCuentaCorriente(numeroCuenta,0,fecha,((Cliente)usuario),nip,1000,0);
+                    cuenta = ((Cliente)usuario).crearCuentaCorriente(numeroCuenta,0,fecha,((Cliente)usuario),nip,1000);
                 else
-                    cuenta =((Cliente)usuario).crearCuentaCorriente(numeroCuenta,0,fecha,((Cliente)usuario),nip,0,1000); 
+                    cuenta =((Cliente)usuario).crearCuentaCorriente(numeroCuenta,0,fecha,((Cliente)usuario),nip,0); 
                 JOptionPane.showMessageDialog(null, "Cuenta corriente creada\n"+cuenta);
                 banco.agregarCuenta(cuenta);
                 break; 
@@ -202,23 +203,83 @@ public class Main {
     public void consultarCuenta(Banco banco){
 
         Usuario usuario = banco.getUsuarioActual();
-        String cuentas = "Cuentas\n"+ ((Cliente)usuario).getCuentasC();
-        int indice = Validacion.validaInt(cuentas);
-        String texto = ((Cliente)usuario).consultarCuenta(indice-1);
-        JOptionPane.showMessageDialog(null,  "Consulta"+texto);
+        int indice = 0;
+        
+        do{
+            String cuentas = "Cuentas\n"+ ((Cliente)usuario).getCuentasC();
+            indice = Validacion.validaInt(cuentas);
+        }while(indice < 1 || indice >((Cliente)usuario).getIndiceCuentas());
+        if(((Cliente)usuario).coincideNIP(Validacion.validaInt("Ingresar NIP"),indice-1)){
+            String texto = ((Cliente)usuario).consultarCuenta(indice-1);
+            JOptionPane.showMessageDialog(null,  "Consulta"+texto);
+        }
+        else{
+            JOptionPane.showMessageDialog(null, "NIP incorrecto");
+        }
+       
 
     }
 
     public void depositar(Banco banco){
         Usuario usuario = banco.getUsuarioActual();
-        String cuentas = "Cuentas a depositar\n"+ ((Cliente)usuario).getCuentasC();
-        int indice = Validacion.validaInt(cuentas);
+        int indice = 0;
+        do{
+            String cuentas = "Cuentas a depositar\n"+ ((Cliente)usuario).getCuentasC();
+            indice = Validacion.validaInt(cuentas);
+        }while(indice < 1 || indice > ((Cliente)usuario).getIndiceCuentas());
+        
         if(((Cliente)usuario).coincideNIP(Validacion.validaInt("Ingresar NIP"),indice-1)){
             float cantidad = Validacion.validaFloat("Insertar Cantidad a depositar");
             ((Cliente)usuario).depositar(cantidad, indice-1);
         }else
             JOptionPane.showMessageDialog(null,"NIP incorrecto");
            
+    }
+
+    public void retirar(Banco banco){
+        Usuario usuario = banco.getUsuarioActual();
+        int indice = 0; 
+        do{
+            String cuentas = "Cuentas para retiro\n"+ ((Cliente)usuario).getCuentasC();
+            indice = Validacion.validaInt(cuentas);
+        }while(indice < 1 || indice> ((Cliente)usuario).getIndiceCuentas());
+        
+        if(((Cliente)usuario).coincideNIP(Validacion.validaInt("Ingresar NIP"),indice-1)){
+            float cantidad = Validacion.validaFloat("Insertar Cantidad a retirar");
+            if( ((Cliente)usuario).getSaldoCuentaEspecifica(indice-1) >= cantidad){
+                JOptionPane.showMessageDialog(null, "Se retira la cantidad de " + cantidad 
+                                              +"\nEl saldo de la cuenta tras el movimiento es de: "
+                                              +(((Cliente)usuario).getSaldoCuentaEspecifica(indice-1)-cantidad));
+                ((Cliente)usuario).retirar(cantidad, indice-1); 
+            }
+               
+            else
+                JOptionPane.showMessageDialog(null, "Saldo insuficiente");
+        }else
+            JOptionPane.showMessageDialog(null,"NIP incorrecto");
+    }
+
+
+    public void realizarTransaccion(Banco banco){
+        int opcion = 0;
+        String texto = "Transacciones\n"
+                        + "[1] Depositar \n[2]Retirar";
+       
+        do{
+             opcion =Validacion.validaInt(texto);
+             if(opcion < 1 || opcion > 2)
+                JOptionPane.showMessageDialog(null,"Numero no valido, vuelve a ingresar opcion");
+        }while(opcion < 1 || opcion > 2);
+
+        switch(opcion){
+            case 1:
+                depositar(banco);
+                break;
+            case 2:
+                retirar(banco);
+                break;
+        }
+
     }
 
    

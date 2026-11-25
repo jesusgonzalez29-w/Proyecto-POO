@@ -4,19 +4,12 @@ public class CuentaCorriente extends CuentaBancaria {
     private float comisionPorManejo;
     private float limiteSobregiro;
 
-    public CuentaCorriente(int numeroCuenta, float saldo, LocalDate fechaApertura,Cliente cliente, int nip, float comisionPorManejo, float limiteSobregiro) {
+    public CuentaCorriente(int numeroCuenta, float saldo, LocalDate fechaApertura,Cliente cliente, int nip, float comisionPorManejo) {
         super(numeroCuenta, saldo, fechaApertura, cliente, nip);
         this.comisionPorManejo = comisionPorManejo;
-        this.limiteSobregiro = limiteSobregiro;
     }
 
-    public void setLimiteSobregiro(float limiteSobregiro){
-        this.limiteSobregiro = limiteSobregiro;
-    }
-
-    public float getLimiteSobregiro(){
-        return limiteSobregiro;
-    }
+   
 
 
     public float getComisionPorManejo() {
@@ -31,7 +24,7 @@ public class CuentaCorriente extends CuentaBancaria {
 
     @Override 
     public String toString(){
-        return super.toString()+"\nComision anual por manejo: $"+comisionPorManejo
-                                +"\nLimite de sobregiro: $"+limiteSobregiro;
+        return super.toString()+"\nComision anual por manejo: $"+comisionPorManejo;
+                                
     }
 }

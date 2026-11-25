@@ -53,10 +53,10 @@ public class CuentaBancaria implements Transacciones {
         saldo+=cantidad;
     }
 
+
     @Override
     public void retirar(float cantidad) {
-        this.saldo -= cantidad;
-        System.out.println("Retiro procesado. Saldo restante: " +saldo);
+        saldo -= cantidad;
     }
 
 

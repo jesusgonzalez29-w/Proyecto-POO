@@ -52,14 +52,18 @@ public class Cliente extends Usuario {
         this.telefono = telefono;
     }
 
-    public CuentaCorriente crearCuentaCorriente(int numeroCuenta, float saldo, LocalDate fechaApertura, Cliente cliente, int nip, float comisionPorManejo, float limiteSobregiro){
-        CuentaCorriente cuenta = new CuentaCorriente(numeroCuenta, saldo, fechaApertura, cliente, nip, comisionPorManejo, limiteSobregiro);
+    public CuentaCorriente crearCuentaCorriente(int numeroCuenta, float saldo, LocalDate fechaApertura, Cliente cliente, int nip, float comisionPorManejo){
+        CuentaCorriente cuenta = new CuentaCorriente(numeroCuenta, saldo, fechaApertura, cliente, nip, comisionPorManejo);
         cuentas[indiceCuentas++] = cuenta; 
         return cuenta;
     }
 
     public void crearCuentaAhorro(){
 
+    }
+
+    public float getSaldoCuentaEspecifica(int indice){
+        return cuentas[indice].getSaldo();
     }
 
     public String getCuentasC(){
@@ -95,6 +99,10 @@ public class Cliente extends Usuario {
 
     public void depositar(float cantidad, int indice){
         cuentas[indice].depositar(cantidad);
+    }
+
+    public void retirar(float cantidad, int indice){
+        cuentas[indice].retirar(cantidad);
     }
 
 
