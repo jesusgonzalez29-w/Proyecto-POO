@@ -1,6 +1,6 @@
 import java.util.Date;
-
-public class Credito {
+import java.io.Serializable;
+public class Credito implements Serializable{
     private int idSolicitud;
     private float montoSolicitado;
     private int plazoMeses;
@@ -8,19 +8,27 @@ public class Credito {
     private TarjetaCredito tarjeta; 
 
 
-    public Credito(int idSolicitud, float montoSolicitado, int plazoMeses, String estado) {
+    public Credito(int idSolicitud, float montoSolicitado, int plazoMeses) {
         this.idSolicitud = idSolicitud;
         this.montoSolicitado = montoSolicitado;
         this.plazoMeses = plazoMeses;
-        this.estado = estado;
+        estado = "Pendiente";
+        tarjeta = null; 
     }
 
-    public void evaluarElegibilidad() {
-        System.out.println("Evaluando elegibilidad para el crédito #" + idSolicitud + " por $" + montoSolicitado);
-        this.estado = "En revisión";
-        System.out.println("Estado actual: " + this.estado);
-    }
+    public Credito(){}
 
+    
+    @Override
+    public String toString(){
+        String texto = "\nNumero de solicitud:"+idSolicitud +"\n Monto solicitado: $"+montoSolicitado
+                +"\nPlazo a meses: "+plazoMeses +"\nEstado de solicitud: "+estado + "\n";
+
+        if(tarjeta!=null)
+            texto += "\n Tarjeta de credito: " +tarjeta.getNumeroTarjeta();
+
+        return texto;
+    }
     public int getPlazoMeses() {
         return plazoMeses;
     }
@@ -50,7 +58,7 @@ public class Credito {
     }
 
     //clase anidada, ya que tarjeta de credito es un producto asociado al credito solicitado pro el cliente
-    public class TarjetaCredito{
+    public class TarjetaCredito implements Serializable{
 
         private int numeroTarjeta;
         private int limiteCredito;

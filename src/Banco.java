@@ -1,3 +1,10 @@
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.File;
+import java.io.IOException;
+
 public class Banco{
 
     //un unico arreglo polimorfico para clientes y administradores 
@@ -6,6 +13,9 @@ public class Banco{
     private Usuario usuarioActual; 
     private CuentaBancaria [] cuentas;
     private int indiceCuentas; 
+    private Credito [] creditos; 
+    private int indiceCreditos; 
+    private boolean running;
 
     public Banco(){
 
@@ -14,7 +24,9 @@ public class Banco{
         indiceUsuarios = 0;  
         cuentas = new CuentaBancaria [30];
         indiceCuentas = 0;
-        
+        creditos = new Credito [15];
+        indiceCreditos = 0;
+        running = true; 
 
 
     }
@@ -45,6 +57,10 @@ public class Banco{
         cuentas[indiceCuentas++]=cuenta;
     }
 
+    public void agregarCredito(Credito credito){
+        creditos[indiceCreditos++] = credito;
+    }
+
 
 
 
@@ -68,8 +84,114 @@ public class Banco{
         this.usuarioActual = usuarioActual;
     }
 
+    public void eliminarCuenta(CuentaBancaria cuenta){
+
+        int j = 0;
+        CuentaBancaria [] nuevoArreglo = new CuentaBancaria[30];
+
+        for(int i = 0; i<indiceCuentas;i++){
+            if(cuentas[i] != cuenta){
+                nuevoArreglo[j] = cuentas[i];
+                j++;
+            }
+        }
+
+        indiceCuentas--;
+        cuentas = nuevoArreglo;
+
+    }
+
+    public boolean guardarDatos(){
+        FileOutputStream flujo; 
+		File archivo = new File("Banco.per");
+		System.out.println("\n Guardando"); 
+
+		
+
+		try{
+
+			//segundo parametro true agrega, false sobreescribe
+			flujo = new FileOutputStream(archivo, false);
+			ObjectOutputStream oos = new ObjectOutputStream(flujo);
+			oos.writeObject(usuarios);
+			oos.writeInt(indiceUsuarios);
+			oos.writeObject(cuentas);
+			oos.writeInt(indiceCuentas);
+            oos.writeObject(creditos);
+            oos.writeInt(indiceCreditos);
+			//cerrar flujo
+			oos.close(); 
+			flujo.close();
+			return true;
 
 
+		}catch(Exception e) {
+			System.out.println("Error al guardar");
+			return false; 
+		}
+
+    }
+
+
+    public void cargarDatos(){
+
+        FileInputStream fisPer = null;
+
+		try{
+
+			//abrir flujo
+			fisPer = new FileInputStream("Banco.per");
+			ObjectInputStream oisPer = new ObjectInputStream(fisPer);
+			//lee objetos
+			usuarios = (Usuario[])oisPer.readObject();
+			indiceUsuarios = oisPer.readInt();
+			cuentas = (CuentaBancaria[])oisPer.readObject();
+			indiceCuentas = oisPer.readInt();
+            creditos = (Credito[])oisPer.readObject();
+            indiceCreditos = oisPer.readInt();
+			
+			
+		}catch(IOException | ClassNotFoundException e){
+			System.out.println("\n Error fin de lectura");
+		}
+		//se ejecutar si o si, siempre.
+		finally{
+
+
+			try{
+				fisPer.close();
+			}catch(IOException e){
+				//TODO Auto-generated 
+				e.printStackTrace();
+			}
+
+		}
+
+
+    }
+
+    public void autoSave(){
+
+        Runnable guardar = () ->{
+
+            while(running){
+                System.out.println("Guardando...");
+                guardarDatos();
+                try{
+                    Thread.sleep(10000);
+                }catch(InterruptedException e){}
+            }
+
+        };
+        Thread hilo = new Thread(guardar);
+        hilo.start();
+
+    }
+
+
+    public void parar(){
+        running = false; 
+    }
 
 
 

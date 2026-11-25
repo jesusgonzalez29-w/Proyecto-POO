@@ -1,6 +1,7 @@
 import java.time.LocalDate;
+import java.io.Serializable;
 
-public class CuentaBancaria implements Transacciones {
+public class CuentaBancaria implements Transacciones,Serializable {
     protected int numeroCuenta;
     protected float saldo;
     protected LocalDate fechaApertura;
@@ -63,6 +64,8 @@ public class CuentaBancaria implements Transacciones {
     public void depositar(float cantidad) {
         saldo+=cantidad;
         comprobantes[indiceComprobantes++] = new Comprobante("Deposito",cantidad,numeroCuenta);
+        int puntos = (int)(cantidad*0.10);
+        cliente.aumentarPuntaje(puntos);
     }
 
 
