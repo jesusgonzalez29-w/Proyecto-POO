@@ -51,6 +51,37 @@ public class Validacion{
 
     }
 
+    public static int validaLongitudNIP(int numero){
+        
+        
+        int div = numero/1000; 
+        while(div < 1 || div > 9){
+           numero = validaInt("El NIP ingresado no es de 4 digitos, ingresa un numero valido");
+           div = numero/1000;
+        }
+        return numero; 
+    }
 
+    public static boolean nuevoCliente(Banco banco){
+        boolean ban = false; 
+        Usuario usuario = banco.getUsuarioActual();
+        if(usuario instanceof Cliente)
+            if(((Cliente)usuario).getIndiceCuentas() ==0)
+                ban = true; 
+        
+        
+        return ban;
+    }
+
+    public static boolean validarPuntaje(Banco banco){
+        boolean ban = false; 
+        Usuario usuario = banco.getUsuarioActual();
+
+        if(usuario instanceof Cliente)
+            if(((Cliente)usuario).getPuntaje() >= 650)
+                ban = true; 
+        
+        return ban;
+    }
 
 }

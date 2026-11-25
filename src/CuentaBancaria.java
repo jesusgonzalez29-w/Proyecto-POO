@@ -1,20 +1,27 @@
-import java.util.Date;
+import java.time.LocalDate;
 
 public class CuentaBancaria implements Transacciones {
     protected int numeroCuenta;
     protected float saldo;
-    protected Date fechaApertura;
+    protected LocalDate fechaApertura;
     protected Cliente cliente;
+    protected int nip; 
+    protected Comprobante [] comprobantes; 
+    protected int indiceComprobantes; 
 
-    public CuentaBancaria(int numeroCuenta, float saldo, Date fechaApertura) {
+    public CuentaBancaria(int numeroCuenta, float saldo, LocalDate fechaApertura, Cliente cliente, int nip) {
         this.numeroCuenta = numeroCuenta;
         this.saldo = saldo;
         this.fechaApertura = fechaApertura;
+        this.cliente = cliente;
+        this.nip = nip;
+        comprobantes = new Comprobante[20]; 
+        indiceComprobantes = 0;
     }
 
 
-    public float consultarSaldo() {
-        return this.saldo;
+    public float getSaldo() {
+        return saldo;
     }
 
     public int getNumeroCuenta() {
@@ -25,11 +32,11 @@ public class CuentaBancaria implements Transacciones {
         this.numeroCuenta = numeroCuenta;
     }
 
-    public Date getFechaApertura() {
+    public LocalDate getFechaApertura() {
         return fechaApertura;
     }
 
-    public void setFechaApertura(Date fechaApertura) {
+    public void setFechaApertura(LocalDate fechaApertura) {
         this.fechaApertura = fechaApertura;
     }
 
@@ -41,17 +48,39 @@ public class CuentaBancaria implements Transacciones {
         return cliente;
     }
 
-
-    
-    @Override
-    public void depositar(float cantidad) {
-        this.saldo += cantidad;
-        System.out.println("Depósito exitoso. Nuevo saldo: " + saldo);
+    public int getNip(){
+        return nip;
     }
+
+    public void mostrarComprobantes(){
+
+        for (int i= 0; i<indiceComprobantes; i++){
+            System.out.println("\nTransaccion ["+ (i+1)+"]\n"+comprobantes[i].toString());
+        }
+    }
+
+     @Override
+    public void depositar(float cantidad) {
+        saldo+=cantidad;
+        comprobantes[indiceComprobantes++] = new Comprobante("Deposito",cantidad,numeroCuenta);
+    }
+
 
     @Override
     public void retirar(float cantidad) {
-        this.saldo -= cantidad;
-        System.out.println("Retiro procesado. Saldo restante: " +saldo);
+        saldo -= cantidad;
+        comprobantes[indiceComprobantes++] = new Comprobante("Retiro",cantidad,numeroCuenta);
+    }
+    
+
+
+
+    
+   
+    @Override
+    public String toString(){
+        return "# de cuenta: "+numeroCuenta + "\nSaldo: "+saldo
+                +"\nFecha de apertura: "+fechaApertura + "\nTitular: "+cliente.getNombre()
+                +"\nNIP: "+ nip;
     }
 }

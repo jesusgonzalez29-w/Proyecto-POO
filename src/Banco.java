@@ -4,14 +4,16 @@ public class Banco{
     private Usuario [] usuarios; 
     private int indiceUsuarios; 
     private Usuario usuarioActual; 
-
+    private CuentaBancaria [] cuentas;
+    private int indiceCuentas; 
 
     public Banco(){
 
        
         usuarios = new Usuario[20];
         indiceUsuarios = 0;  
-    
+        cuentas = new CuentaBancaria [30];
+        indiceCuentas = 0;
         
 
 
@@ -37,6 +39,10 @@ public class Banco{
                 return usuarios[i];
         }
         return null;
+    }
+
+    public void agregarCuenta(CuentaBancaria cuenta){
+        cuentas[indiceCuentas++]=cuenta;
     }
 
 
