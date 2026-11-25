@@ -62,5 +62,40 @@ public class Cliente extends Usuario {
 
     }
 
+    public String getCuentasC(){
+
+        String listaCuentas = "";
+        String tipoCuenta = "";
+
+        for(int i = 0; i<indiceCuentas; i++){
+            if(cuentas[i] instanceof CuentaCorriente)
+                tipoCuenta = "Cuenta corriente";
+            else
+                tipoCuenta = "Cuenta de ahorro";
+            listaCuentas += tipoCuenta+ "["+(i+1)+"]: " +cuentas[i].getNumeroCuenta()+"\n";
+        }
+        return listaCuentas;
+    }
+
+    public String consultarCuenta(int indice){
+        return "\nNumero de cuenta: "+cuentas[indice].getNumeroCuenta()
+                +"\nTitular: "+nombre
+                +"\n Saldo cuenta: $" + cuentas[indice].getSaldo();
+               
+                
+    } 
+
+    public boolean coincideNIP(int NIP, int indice)
+    {
+        boolean estado = false;
+        if(cuentas[indice].getNip() == NIP)
+            estado = true;
+        return estado; 
+    }
+
+    public void depositar(float cantidad, int indice){
+        cuentas[indice].depositar(cantidad);
+    }
+
 
 }

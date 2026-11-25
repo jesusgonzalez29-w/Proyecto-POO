@@ -16,8 +16,8 @@ public class CuentaBancaria implements Transacciones {
     }
 
 
-    public float consultarSaldo() {
-        return this.saldo;
+    public float getSaldo() {
+        return saldo;
     }
 
     public int getNumeroCuenta() {
@@ -44,12 +44,13 @@ public class CuentaBancaria implements Transacciones {
         return cliente;
     }
 
+    public int getNip(){
+        return nip;
+    }
 
-    
-    @Override
+     @Override
     public void depositar(float cantidad) {
-        this.saldo += cantidad;
-        System.out.println("Depósito exitoso. Nuevo saldo: " + saldo);
+        saldo+=cantidad;
     }
 
     @Override
@@ -58,10 +59,14 @@ public class CuentaBancaria implements Transacciones {
         System.out.println("Retiro procesado. Saldo restante: " +saldo);
     }
 
+
+
+    
+   
     @Override
     public String toString(){
         return "# de cuenta: "+numeroCuenta + "\nSaldo: "+saldo
-                +"\nFecha de apertura: "+fechaApertura + "\nCliente: "+cliente.getNombre()
+                +"\nFecha de apertura: "+fechaApertura + "\nTitular: "+cliente.getNombre()
                 +"\nNIP: "+ nip;
     }
 }

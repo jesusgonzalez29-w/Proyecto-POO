@@ -72,7 +72,7 @@ public class Main {
 
         int bandera = 0;
         int opc = 0; 
-        String opciones = "\n[1] Solicitar apertura de cuenta \n[2]Solicitar saldo cuenta \n[3] Realizar transaccion \n[4] Solicitar credito \n[5] Abonar tarjeta de credito \n[6] Cancelar cuenta \n[6] Salir";
+        String opciones = "\n[1] Solicitar apertura de cuenta \n[2]Consultar saldo cuenta \n[3] Realizar transaccion \n[4] Solicitar credito \n[5] Abonar tarjeta de credito \n[6] Cancelar cuenta \n[6] Salir";
         String texto = "Menu clientes \n" +opciones;
 
         do{
@@ -88,9 +88,11 @@ public class Main {
                 aperturaCuenta(banco);
                 break;
             case 2:
+                consultarCuenta(banco);
                 break;
 
             case 3:
+                depositar(banco);
                 break;
 
             case 4:
@@ -184,6 +186,7 @@ public class Main {
                 else
                     cuenta =((Cliente)usuario).crearCuentaCorriente(numeroCuenta,0,fecha,((Cliente)usuario),nip,0,1000); 
                 JOptionPane.showMessageDialog(null, "Cuenta corriente creada\n"+cuenta);
+                banco.agregarCuenta(cuenta);
                 break; 
 
             case 2:
@@ -196,7 +199,27 @@ public class Main {
        
     }
 
+    public void consultarCuenta(Banco banco){
 
+        Usuario usuario = banco.getUsuarioActual();
+        String cuentas = "Cuentas\n"+ ((Cliente)usuario).getCuentasC();
+        int indice = Validacion.validaInt(cuentas);
+        String texto = ((Cliente)usuario).consultarCuenta(indice-1);
+        JOptionPane.showMessageDialog(null,  "Consulta"+texto);
+
+    }
+
+    public void depositar(Banco banco){
+        Usuario usuario = banco.getUsuarioActual();
+        String cuentas = "Cuentas a depositar\n"+ ((Cliente)usuario).getCuentasC();
+        int indice = Validacion.validaInt(cuentas);
+        if(((Cliente)usuario).coincideNIP(Validacion.validaInt("Ingresar NIP"),indice-1)){
+            float cantidad = Validacion.validaFloat("Insertar Cantidad a depositar");
+            ((Cliente)usuario).depositar(cantidad, indice-1);
+        }else
+            JOptionPane.showMessageDialog(null,"NIP incorrecto");
+           
+    }
 
    
 }
