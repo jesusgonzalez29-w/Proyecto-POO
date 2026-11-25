@@ -24,9 +24,7 @@ public class Cliente extends Usuario {
         System.out.println("Solicitando credito a nombre de " + getNombre());
     }
 
-    public void consultarHistorial() {
-        System.out.println("Consultando historial de transacciones");
-    }
+    
 
     public String getRfc() {
         return rfc;
@@ -103,6 +101,24 @@ public class Cliente extends Usuario {
 
     public void retirar(float cantidad, int indice){
         cuentas[indice].retirar(cantidad);
+    }
+
+    public void reporteTransacciones(){
+
+      
+        Runnable reporte = ()->{
+            System.out.println("\n---------Historial de transacciones por cuenta---------\n\n");
+            for(int i = 0; i<indiceCuentas; i++){
+                System.out.println("\nCuenta ["+(i+1)+"]: "+cuentas[i].getNumeroCuenta()+"\n");
+                cuentas[i].mostrarComprobantes();
+                try{
+                Thread.sleep(1000);
+                }catch(InterruptedException e){}
+
+            }
+        };
+        Thread hilo = new Thread(reporte);
+        hilo.start();
     }
 
 

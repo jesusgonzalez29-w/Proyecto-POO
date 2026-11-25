@@ -72,14 +72,14 @@ public class Main {
 
         int bandera = 0;
         int opc = 0; 
-        String opciones = "\n[1] Solicitar apertura de cuenta \n[2]Consultar saldo cuenta \n[3] Realizar transaccion \n[4] Solicitar credito \n[5] Abonar tarjeta de credito \n[6] Cancelar cuenta \n[6] Salir";
+        String opciones = "\n[1] Solicitar apertura de cuenta \n[2]Consultar saldo cuenta \n[3] Realizar transaccion \n [4] Historial de transacciones\n[5] Solicitar credito \n[6] Abonar tarjeta de credito \n[7] Cancelar cuenta \n[8] Salir";
         String texto = "Menu clientes \n" +opciones;
 
         do{
              opc = Validacion.validaInt(texto);
-            if(opc < 1 || opc > 7)
+            if(opc < 1 || opc > 8)
                 JOptionPane.showMessageDialog(null, "Valor no valido, intente de nuevo");
-        }while(opc < 1 || opc > 7);
+        }while(opc < 1 || opc > 8);
 
         switch(opc){
 
@@ -88,25 +88,39 @@ public class Main {
                 aperturaCuenta(banco);
                 break;
             case 2:
-                consultarCuenta(banco);
+                if(!Validacion.nuevoCliente(banco))
+                    consultarCuenta(banco);
+                else
+                    JOptionPane.showMessageDialog(null, "No tienes cuentas abiertas");
                 break;
 
             case 3:
-                realizarTransaccion(banco);
+                if(!Validacion.nuevoCliente(banco))
+                    realizarTransaccion(banco);
+                  else
+                    JOptionPane.showMessageDialog(null, "No tienes cuentas abiertas");
                 break;
 
             case 4:
-                
+                if(!Validacion.nuevoCliente(banco))
+                    consultarTransacciones(banco);
+                else
+                    JOptionPane.showMessageDialog(null, "No tienes cuentas abiertas");
                 break;
 
             case 5:
                 break;
 
             case 6:
+                
+                break;
+            case 7:
+                break;
+
+            case 8:
                 bandera = 1;
                 JOptionPane.showMessageDialog(null, "Saliendo...");
                 break;
-
 
 
 
@@ -246,6 +260,10 @@ public class Main {
         
         if(((Cliente)usuario).coincideNIP(Validacion.validaInt("Ingresar NIP"),indice-1)){
             float cantidad = Validacion.validaFloat("Insertar Cantidad a retirar");
+            if(cantidad < 1){
+                JOptionPane.showMessageDialog(null, "Cantidad no valida");
+                return;
+            }
             if( ((Cliente)usuario).getSaldoCuentaEspecifica(indice-1) >= cantidad){
                 JOptionPane.showMessageDialog(null, "Se retira la cantidad de " + cantidad 
                                               +"\nEl saldo de la cuenta tras el movimiento es de: "
@@ -280,6 +298,11 @@ public class Main {
                 break;
         }
 
+    }
+
+    public void consultarTransacciones(Banco banco){
+        Usuario usuario = banco.getUsuarioActual();
+        ((Cliente)usuario).reporteTransacciones();
     }
 
    
