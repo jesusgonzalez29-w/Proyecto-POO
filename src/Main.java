@@ -148,6 +148,25 @@ public class Main {
         return bandera;
     }
 
+    public void aperturaCuenta(Banco banco){
+
+        int maxOpc = 1;
+        int opc = 0;
+        String opciones = "[1] Crear cuenta de ahorro";
+        if(Validacion.nuevoCliente() || Validacion.validarPuntaje() >= 650){
+            opciones+="\n[2] Crear cuenta corriente";
+            maxOpc = 2;
+        }
+            
+        texto = "Apertura de cuentas\n" + opciones;
+        do{
+            int opc = Validacion.validaInt(texto);
+            if(opc < 1 || opc > maxOpc)
+                JOptionPane.showInputDialog(null, "Opcion no valida ");
+        }while(opc<1 || opc>maxOpc); 
+       
+    }
+
 
 
    
