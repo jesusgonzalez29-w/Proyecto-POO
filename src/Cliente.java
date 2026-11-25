@@ -4,6 +4,7 @@ public class Cliente extends Usuario {
     private long telefono;
     private CuentaBancaria[] cuentas;
     private int indiceCuentas; 
+    private Credito [] creditos; 
 
     // Constructor de clase hija, llamando primero a clase padre
     public Cliente(int idUsuario, String nombre, String correo, String contrasena, String rfc, long telefono) {
@@ -28,10 +29,14 @@ public class Cliente extends Usuario {
 
     public void setRfc(String rfc) {
         this.rfc = rfc;
-    }
+    } 
 
     public long getTelefono() {
         return telefono;
+    }
+
+    public int getIndiceCuentas(){
+        return indiceCuentas;
     }
 
     public void setTelefono(long telefono) {
