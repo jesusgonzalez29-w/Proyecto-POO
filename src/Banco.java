@@ -70,6 +70,7 @@ public class Banco{
         crearAdmin(1, "Carlos Huerta", "chuerta@algo.com", "123",1);
         crearCliente(1000, "Axel Suarez", "asuarez@algo.com", "234", "RFC...", 6641231234L);
         crearCliente(1001, "Jared Cruz", "jcruz@algo.com", "0123", "RFC..", 6645656528L);
+        crearCliente(1002, "Mario Cruz", "mcruz@algo.com", "111", "RFC..", 6645654321L);
 
 
 
@@ -155,17 +156,15 @@ public class Banco{
 			System.out.println("\n Error fin de lectura");
 		}
 		//se ejecutar si o si, siempre.
-		finally{
-
-
-			try{
-				fisPer.close();
-			}catch(IOException e){
-				//TODO Auto-generated 
-				e.printStackTrace();
-			}
-
-		}
+		finally {
+                    try {
+                        if (fisPer != null) {
+                            fisPer.close();
+                        }
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
 
 
     }
@@ -193,7 +192,29 @@ public class Banco{
         running = false; 
     }
 
+    public Usuario[] getUsuarios() {
+        return usuarios;
+    }
 
+    public int getIndiceUsuarios() {
+        return indiceUsuarios;
+    }
+
+    public CuentaBancaria[] getCuentas() {
+        return cuentas;
+    }
+
+    public int getIndiceCuentas() {
+        return indiceCuentas;
+    }
+
+    public Credito[] getCreditos() {
+        return creditos;
+    }
+
+    public int getIndiceCreditos() {
+        return indiceCreditos;
+    }
 
 
 

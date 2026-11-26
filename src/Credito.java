@@ -57,6 +57,14 @@ public class Credito implements Serializable{
        tarjeta = new TarjetaCredito(numeroTarjeta,limiteCredito,saldoDeudor,fechaCorte);
     }
 
+    public int getIdSolicitud() {
+        return idSolicitud;
+    }
+
+    public TarjetaCredito getTarjeta() {
+        return tarjeta;
+    }
+
     //clase anidada, ya que tarjeta de credito es un producto asociado al credito solicitado pro el cliente
     public class TarjetaCredito implements Serializable{
 

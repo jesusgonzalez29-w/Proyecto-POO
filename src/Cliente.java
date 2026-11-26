@@ -63,8 +63,45 @@ public class Cliente extends Usuario {
         return cuenta;
     }
 
-    public void crearCuentaAhorro(){
+    public CuentaAhorro crearCuentaAhorro(int numeroCuenta, float saldo, LocalDate fechaApertura, float tasaInteresMensual, Cliente cliente, int nip) {
+        CuentaAhorro cuenta = new CuentaAhorro(numeroCuenta, saldo, fechaApertura, tasaInteresMensual, cliente, nip);
+        cuentas[indiceCuentas++] = cuenta;
+        return cuenta;
+    }
 
+    public boolean tieneTarjetasActivas() {
+        for (int i = 0; i < indiceCreditos; i++) {
+            if (creditos[i].getTarjeta() != null) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public String getTarjetasC() {
+        String texto = "";
+        for (int i = 0; i < indiceCreditos; i++) {
+            if (creditos[i].getTarjeta() != null) {
+                Credito.TarjetaCredito tc = creditos[i].getTarjeta();
+                texto += "[" + (i + 1) + "] Tarjeta #" + tc.getNumeroTarjeta()
+                       + " | Límite: $" + tc.getLimiteCredito()
+                       + " | Saldo deudor: $" + tc.getSaldoDeudor() + "\n";
+            }
+        }
+        return texto;
+    }
+
+    public Credito getCreditoEspecifico(int indice) {
+        return creditos[indice];
+    }
+
+    public String getHistorialCompleto() {
+        String info = "Cliente: " + nombre + " (ID: " + idUsuario + ")\n"
+                    + "Correo: " + correo + " | RFC: " + rfc + " | Tel: " + telefono + "\n"
+                    + "Puntaje crediticio: " + puntaje + "\n"
+                    + "--- Cuentas (" + indiceCuentas + ") ---\n" + getCuentasC()
+                    + "--- Créditos (" + indiceCreditos + ") ---\n" + getCreditosC();
+        return info;
     }
 
     public float getSaldoCuentaEspecifica(int indice){
