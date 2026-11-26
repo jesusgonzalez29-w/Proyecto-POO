@@ -14,10 +14,10 @@ public class Main {
 
    public Main() {
         banco = new Banco();
+        
+        
+        //banco.datosPrueba();
         banco.cargarDatos();
-        if (banco.getIndiceUsuarios() == 0) {
-            banco.datosPrueba();
-        }
         banco.autoSave();
         implementacionLogin();
         banco.parar();
@@ -217,7 +217,7 @@ public class Main {
 
         for (int i = 0; i < total; i++) {
             lista += "[" + (i + 1) + "] " + creditos[i].toString() + "----------------\n";
-            if (creditos[i].getEstado().equalsIgnoreCase("Pendiente")) {
+            if (creditos[i].getEstado().equals("Pendiente")) {
                 hayPendientes = true;
             }
         }
@@ -228,7 +228,7 @@ public class Main {
         }
 
         int sel = Validacion.validaInt(lista + "\nIngresa el numero de solicitud a evaluar:") - 1;
-        if (sel < 0 || sel >= total || !creditos[sel].getEstado().equalsIgnoreCase("Pendiente")) {
+        if (sel < 0 || sel >= total || !creditos[sel].getEstado().equals("Pendiente")) {
             JOptionPane.showMessageDialog(null, "Seleccion invalida o la solicitud ya fue evaluada.");
             return;
         }
@@ -366,6 +366,30 @@ public class Main {
 
     }
 
+    public void usarTarjeta(Banco banco){
+        Usuario usuario = banco.getUsuarioActual();
+        int indice = 0;
+        if(!((Cliente)usuario).tieneTarjetasActivas()){
+            JOptionPane.showMessageDialog(null,"No tiene tarjetas activas");
+            return;
+        }
+
+        do{
+
+            indice = Validacion.validaInt("Tarjetas de credito\n"+((Cliente)usuario).getTarjetasC());
+        }while(indice < 1 || indice > ((Cliente)usuario).getIndiceCreditos());
+
+        Credito.TarjetaCredito tarjeta = ((Cliente)usuario).getCreditoEspecifico(indice-1).getTarjeta();
+        float montoGasto = Validacion.validaFloat("Ingresa la cantidad a gastar:");
+        if(tarjeta.getLimiteCredito()-tarjeta.getSaldoDeudor() < montoGasto)
+            JOptionPane.showMessageDialog(null, "La cantidad sobrepasa el credito disponible: $" + (tarjeta.getLimiteCredito()-tarjeta.getSaldoDeudor()));
+        else{
+            tarjeta.gastar(montoGasto);
+            JOptionPane.showMessageDialog(null, "Se hizo un cargo de $"+montoGasto+" a tu tarjeta "+tarjeta.getNumeroTarjeta());
+        }
+        
+    }
+
     public void abonarTarjeta(Banco banco) {
         Cliente cliente = (Cliente) banco.getUsuarioActual();
         if (!cliente.tieneTarjetasActivas()) {
@@ -444,8 +468,8 @@ public class Main {
                 return;
             }
             if( ((Cliente)usuario).getSaldoCuentaEspecifica(indice-1) >= cantidad){
-                JOptionPane.showMessageDialog(null, "Se retira la cantidad de " + cantidad 
-                                              +"\nEl saldo de la cuenta tras el movimiento es de: "
+                JOptionPane.showMessageDialog(null, "Se retira la cantidad de $" + cantidad 
+                                              +"\nEl saldo de la cuenta tras el movimiento es de: $"
                                               +(((Cliente)usuario).getSaldoCuentaEspecifica(indice-1)-cantidad));
                 ((Cliente)usuario).retirar(cantidad, indice-1); 
             }
@@ -456,17 +480,55 @@ public class Main {
             JOptionPane.showMessageDialog(null,"NIP incorrecto");
     }
 
+     public void transferir(Banco banco){
 
-    public void realizarTransaccion(Banco banco){
+        Usuario usuario = banco.getUsuarioActual();
+        int indice = 0; 
+        int indiceDestino = 0;
+
+        if(banco.getIndiceCuentas()-1 == 0)
+            return;
+
+
+        do{
+            String cuentas = "Seleccione cuenta de origen\n"+ ((Cliente)usuario).getCuentasC();
+            indice = Validacion.validaInt(cuentas);
+        }while(indice < 1 || indice> ((Cliente)usuario).getIndiceCuentas());
+        
+        if(((Cliente)usuario).coincideNIP(Validacion.validaInt("Ingresar NIP"),indice-1)){
+
+            float cantidad = Validacion.validaFloat("Insertar Cantidad a transferir");
+            if(cantidad < 1){
+                JOptionPane.showMessageDialog(null, "Cantidad no valida");
+                return;
+            }
+            JOptionPane.showMessageDialog(null, "Cantidad a transferir: $"+cantidad
+                                        + "\nSaldo restante: $" +(((Cliente)usuario).getSaldoCuentaEspecifica(indice-1)-cantidad));
+
+            ((Cliente)usuario).retirar(cantidad,indice-1);
+            do{
+                indiceDestino = Validacion.validaInt("Seleccione cuenta de destino\n"+banco.getCuentasB(((Cliente)usuario).getNumeroCuentaEspecifica(indice-1)));
+            }while(indiceDestino < 1 || indiceDestino>banco.getIndiceCuentas());
+           
+            int numCuentaDestino = banco.transferir(cantidad,indiceDestino-1);
+            JOptionPane.showMessageDialog(null, "Se tranfirio $"+cantidad+" a la cuenta "+numCuentaDestino+" exitosamente");
+
+
+        }
+
+    }
+
+
+   public void realizarTransaccion(Banco banco){
         int opcion = 0;
         String texto = "Transacciones\n"
-                        + "[1] Depositar \n[2]Retirar";
+                        + "[1] Depositar \n[2] Retirar \n[3] Transferir \n[4] Simular uso de tarjeta credito";
        
         do{
              opcion =Validacion.validaInt(texto);
-             if(opcion < 1 || opcion > 2)
+             if(opcion < 1 || opcion > 4)
                 JOptionPane.showMessageDialog(null,"Numero no valido, vuelve a ingresar opcion");
-        }while(opcion < 1 || opcion > 2);
+        }while(opcion < 1 || opcion > 4);
 
         switch(opcion){
             case 1:
@@ -474,6 +536,12 @@ public class Main {
                 break;
             case 2:
                 retirar(banco);
+                break;
+            case 3:
+                transferir(banco);
+                break;
+            case 4:
+                usarTarjeta(banco);
                 break;
         }
 

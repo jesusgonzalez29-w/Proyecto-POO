@@ -123,6 +123,10 @@ public class Cliente extends Usuario {
         return listaCuentas;
     }
 
+    public int getNumeroCuentaEspecifica(int indice){
+        return cuentas[indice].getNumeroCuenta();
+    }
+
     public String consultarCuenta(int indice){
         return "\nNumero de cuenta: "+cuentas[indice].getNumeroCuenta()
                 +"\nTitular: "+nombre

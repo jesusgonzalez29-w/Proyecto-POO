@@ -21,7 +21,7 @@ public class Credito implements Serializable{
     
     @Override
     public String toString(){
-        String texto = "\nNumero de solicitud:"+idSolicitud +"\n Monto solicitado: $"+montoSolicitado
+        String texto = "\nNumero de solicitud: "+idSolicitud +"\nMonto solicitado: $"+montoSolicitado
                 +"\nPlazo a meses: "+plazoMeses +"\nEstado de solicitud: "+estado + "\n";
 
         if(tarjeta!=null)
@@ -80,6 +80,11 @@ public class Credito implements Serializable{
             this.limiteCredito = limiteCredito;
             this.saldoDeudor = saldoDeudor;
             this.fechaCorte = fechaCorte;
+        }
+
+        public void gastar(float cantidad){
+            limiteCredito -= cantidad; 
+            saldoDeudor += cantidad; 
         }
 
 

@@ -13,7 +13,7 @@ public class Administrador extends Usuario {
             int numTarjeta = (int) (Math.random() * (999999 - 100000 + 1)) + 100000;
             int limite = (int) credito.getMontoSolicitado();
             // Se activa la clase anidada TarjetaCredito con saldo deudor inicial igual al monto aprobado
-            credito.setTarjetaCredito(numTarjeta, limite, credito.getMontoSolicitado(), new Date());
+            credito.setTarjetaCredito(numTarjeta, limite, 0, new Date());
         } else {
             credito.setEstado("Rechazado");
         }
