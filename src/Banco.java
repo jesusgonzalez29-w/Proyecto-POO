@@ -75,6 +75,34 @@ public class Banco{
 
     }
 
+    public int getIndiceCuentas(){
+        return indiceCuentas;
+    }
+
+    public String getCuentasB(int numeroCuentaActual){
+
+        String tipoCuenta = "";
+        String texto = "";
+        for(int i = 0; i<indiceCuentas; i++){
+            //evitar transferir a la cuenta actual;
+            if(numeroCuentaActual == cuentas[i].getNumeroCuenta())
+                continue;
+
+            if(cuentas[i] instanceof CuentaCorriente)
+                tipoCuenta = "Cuenta corriente"; 
+            else
+                tipoCuenta = "Cuenta de ahorro";
+            
+            texto+= "["+(i+1)+"] "+ tipoCuenta+": "+ cuentas[i].getNumeroCuenta()+"\n";
+        }
+        return texto;
+    }
+
+    public int transferir(float cantidad, int indice){
+        cuentas[indice].depositar(cantidad);
+        return cuentas[indice].getNumeroCuenta();
+    }
+
 
     public Usuario getUsuarioActual(){
         return usuarioActual;
@@ -104,7 +132,7 @@ public class Banco{
     public boolean guardarDatos(){
         FileOutputStream flujo; 
 		File archivo = new File("Banco.per");
-		System.out.println("\n Guardando"); 
+		System.out.println("\n Guardando..."); 
 
 		
 
@@ -175,7 +203,7 @@ public class Banco{
         Runnable guardar = () ->{
 
             while(running){
-                System.out.println("Guardando...");
+                
                 guardarDatos();
                 try{
                     Thread.sleep(10000);

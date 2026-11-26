@@ -296,17 +296,55 @@ public class Main {
             JOptionPane.showMessageDialog(null,"NIP incorrecto");
     }
 
+    public void transferir(Banco banco){
+
+        Usuario usuario = banco.getUsuarioActual();
+        int indice = 0; 
+        int indiceDestino = 0;
+
+        if(banco.getIndiceCuentas()-1 == 0)
+            return;
+
+
+        do{
+            String cuentas = "Seleccione cuenta de origen\n"+ ((Cliente)usuario).getCuentasC();
+            indice = Validacion.validaInt(cuentas);
+        }while(indice < 1 || indice> ((Cliente)usuario).getIndiceCuentas());
+        
+        if(((Cliente)usuario).coincideNIP(Validacion.validaInt("Ingresar NIP"),indice-1)){
+
+            float cantidad = Validacion.validaFloat("Insertar Cantidad a transferir");
+            if(cantidad < 1){
+                JOptionPane.showMessageDialog(null, "Cantidad no valida");
+                return;
+            }
+            JOptionPane.showMessageDialog(null, "Cantidad a transferir: $"+cantidad
+                                        + "\nSaldo restante: " +(((Cliente)usuario).getSaldoCuentaEspecifica(indice-1)-cantidad));
+
+            ((Cliente)usuario).retirar(cantidad,indice-1);
+            do{
+                indiceDestino = Validacion.validaInt("Seleccione cuenta de destino\n"+banco.getCuentasB(((Cliente)usuario).getNumeroCuentaEspecifica(indice-1)));
+            }while(indiceDestino < 1 || indiceDestino>banco.getIndiceCuentas());
+           
+            int numCuentaDestino = banco.transferir(cantidad,indiceDestino-1);
+            JOptionPane.showMessageDialog(null, "Se tranfirio $"+cantidad+" a la cuenta "+numCuentaDestino+" exitosamente");
+
+
+        }
+
+    }
+
 
     public void realizarTransaccion(Banco banco){
         int opcion = 0;
         String texto = "Transacciones\n"
-                        + "[1] Depositar \n[2]Retirar";
+                        + "[1] Depositar \n[2] Retirar \n[3] Transferir";
        
         do{
              opcion =Validacion.validaInt(texto);
-             if(opcion < 1 || opcion > 2)
+             if(opcion < 1 || opcion > 3)
                 JOptionPane.showMessageDialog(null,"Numero no valido, vuelve a ingresar opcion");
-        }while(opcion < 1 || opcion > 2);
+        }while(opcion < 1 || opcion > 3);
 
         switch(opcion){
             case 1:
@@ -314,6 +352,9 @@ public class Main {
                 break;
             case 2:
                 retirar(banco);
+                break;
+            case 3:
+                transferir(banco);
                 break;
         }
 

@@ -71,6 +71,10 @@ public class Cliente extends Usuario {
         return cuentas[indice].getSaldo();
     }
 
+    public int getNumeroCuentaEspecifica(int indice){
+        return cuentas[indice].getNumeroCuenta();
+    }
+
     public String getCuentasC(){
 
         String listaCuentas = "";
